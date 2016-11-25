@@ -8,6 +8,14 @@
       "check-operator",
       "check-separator",
       "check-type"
+    ],
+    "curly": false,
+    "no-console": [true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
     ]
   }
 }

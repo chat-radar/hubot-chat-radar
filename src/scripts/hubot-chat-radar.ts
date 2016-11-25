@@ -4,6 +4,8 @@
 // Commands:
 //   hubot мой город <город> - Изменить свой город
 
+import * as Nominatim from 'nominatim-browser';
+
 class HubotChatRadar {
 
   protected robot;
@@ -15,8 +17,18 @@ class HubotChatRadar {
   }
 
   public city(msg) {
-    const name = <string>msg.match[2];
-    msg.send(name);
+    const cityName = <string>msg.match[2];
+    const countryName = 'РФ';
+
+    Nominatim.geocode({ city: cityName, country: countryName }).then((results: Nominatim.NominatimResponse[]) => {
+      if (results.length === 0)
+        return msg.send('Извините, город не найден. Попробуйте уточнить запрос');
+      return results[0];
+    }).then((city) => {
+      console.log(city);
+    }).catch(err => {
+      msg.send(err.message);
+    });
   }
 
 }

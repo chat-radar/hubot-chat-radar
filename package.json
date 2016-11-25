@@ -21,10 +21,10 @@
     "watch": "npm run build -- --watch",
     "watch:test": "npm run test -- --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "nominatim-browser": "^1.0.0"
+  },
   "devDependencies": {
-    "@types/chai": "3.4.30",
-    "@types/mocha": "2.2.29",
     "@types/node": "^6.0.31",
     "rimraf": "^2.5.4",
     "ts-node": "^1.2.2",
