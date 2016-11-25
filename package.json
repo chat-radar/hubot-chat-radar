@@ -21,18 +21,18 @@
     "watch": "npm run build -- --watch",
     "watch:test": "npm run test -- --watch"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "3.4.30",
     "@types/mocha": "2.2.29",
-    "@types/node": "6.0.31",
-    "chai": "^3.5.0",
-    "mocha": "^3.0.1",
+    "@types/node": "^6.0.31",
     "rimraf": "^2.5.4",
     "ts-node": "^1.2.2",
     "tslint": "3.15.1",
     "typescript": "2.0.3"
+  },
+  "peerDependencies": {
+    "hubot": "2.x"
   },
   "engines": {
     "node": ">=4.0.0"

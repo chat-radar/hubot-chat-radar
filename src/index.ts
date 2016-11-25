@@ -1,3 +1,5 @@
-import { Greeter } from "./greeter";
+import * as path from 'path';
 
-export { Greeter };
+export = (robot) => {
+  robot.loadFile(path.resolve(__dirname, 'scripts'), 'hubot-chat-radar.js');
+};
