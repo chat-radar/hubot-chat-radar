@@ -22,14 +22,16 @@
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
-    "nominatim-browser": "^1.0.0"
+    "nominatim-browser": "^1.0.0",
+    "parse": "^1.9.2"
   },
   "devDependencies": {
-    "@types/node": "^6.0.31",
+    "@types/node": "^6.0.51",
+    "@types/parse": "^1.2.32",
     "rimraf": "^2.5.4",
-    "ts-node": "^1.2.2",
-    "tslint": "3.15.1",
-    "typescript": "2.0.3"
+    "ts-node": "^1.7.0",
+    "tslint": "4.0.2",
+    "typescript": "2.0.10"
   },
   "peerDependencies": {
     "hubot": "2.x"

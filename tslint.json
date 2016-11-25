@@ -9,13 +9,15 @@
       "check-separator",
       "check-type"
     ],
-    "curly": false,
     "no-console": [true,
       "debug",
       "info",
       "time",
       "timeEnd",
       "trace"
-    ]
+    ],
+    "curly": false,
+    "no-string-literal": false,
+    "ordered-imports": false
   }
 }
