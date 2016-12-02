@@ -30,7 +30,11 @@ class City extends Parse.Object {
       city.set('name', cityAddress.display_name);
       city.set('address', cityAddress.address);
       city.set('geo', new Parse.GeoPoint([cityAddress.lat, cityAddress.lon]));
-      city.set('photoUrl', await City.fetchPhoto(cityAddress));
+      try {
+        city.set('photoUrl', await City.fetchPhoto(cityAddress));
+      } catch (err) {
+        city.set('photoUrl', null);
+      }
       city.set('force', false);
       await city.save();
     }
