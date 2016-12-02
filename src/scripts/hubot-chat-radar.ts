@@ -5,7 +5,8 @@
 //   hubot мой город <город> - Изменить свой город
 
 import { City, Person } from '../api';
-import * as Nominatim from 'nominatim-browser';
+import { VisibleError } from '../errors';
+// import * as Nominatim from 'nominatim-browser';
 // import * as Parse from 'parse/node';
 
 class HubotChatRadar {
@@ -15,43 +16,33 @@ class HubotChatRadar {
   constructor(robot) {
     this.robot = robot;
 
-    this.robot.respond(/(мой город|город|my city|city) (.*)$/i, this.city);
+    this.robot.respond(/(мой город|город|my city|city) (is)? ?(.*)$/i, this.city);
   }
 
-  public city(msg) {
-    const nickname = msg.envelope.user.name;
-    const cityName = <string>msg.match[2];
-    const countryName = 'РФ';
+  async city(msg) {
+    const cityName = <string>msg.match[3];
+    const nickName = msg.envelope.user.name;
 
-    Nominatim.geocode({ city: cityName, country: countryName }).then((results: Nominatim.NominatimResponse[]) => {
+    try {
+      const cityAddress = await City.fetchAddress(cityName);
 
-      if (results.length === 0)
-        throw new Error('Извините, город не найден. Попробуйте уточнить запрос');
+      if (cityAddress === null)
+        throw new VisibleError('Извините, город не найден. Попробуйте уточнить название');
 
-      return Promise.all([
-        City.findOrCreate(results[0]),
-        Person.findOrCreate(nickname),
-      ]);
-
-    }).then(([city, person]: [City, Person]) => {
+      const city = await City.findOrCreate(cityAddress);
+      const person = await Person.findOrCreate(nickName);
 
       person.set('city', city);
-
-      return Promise.all([
-        city,
-        person.save(),
-      ]);
-
-    }).then(([city]) => {
+      person.save();
 
       msg.reply(`Твой адрес изменен на «${city.get('name')}»`);
-
-    }).catch((err) => {
-
+    } catch (err) {
       this.robot.logger.error(err);
-      msg.send(err.message);
 
-    });
+      if (err instanceof VisibleError)
+        return msg.send(err.message);
+      msg.send('Произошла ошибка. Попробуйте еще раз');
+    }
   }
 
 }

@@ -2,19 +2,17 @@ import * as Parse from 'parse/node';
 
 class Person extends Parse.Object {
 
-  public static findOrCreate(nickname: string) {
-    const query = new Parse.Query(Person);
-    query.equalTo('nickname', nickname);
+  static async findOrCreate(nickName: string): Promise<Person> {
+    const people = await (new Parse.Query(Person)).equalTo('nickname', nickName).find();
+    let person = people[0];
 
-    return query.find().then((results: Person[]) => {
-      if (results.length < 1) {
-        const city = new Person();
-        city.set('nickname', nickname);
-        return city.save();
-      }
+    if (person === undefined) {
+      person = new Person();
+      person.set('nickname', nickName);
+      await person.save();
+    }
 
-      return results[0];
-    });
+    return person;
   }
 
   constructor() {
