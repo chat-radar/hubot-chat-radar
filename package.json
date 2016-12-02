@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "nominatim-browser": "^1.0.0",
-    "parse": "^1.9.2"
+    "parse": "^1.9.2",
+    "wikijs": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^6.0.51",

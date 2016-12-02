@@ -6,8 +6,6 @@
 
 import { City, Person } from '../api';
 import { VisibleError } from '../errors';
-// import * as Nominatim from 'nominatim-browser';
-// import * as Parse from 'parse/node';
 
 class HubotChatRadar {
 
