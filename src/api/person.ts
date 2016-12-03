@@ -15,6 +15,18 @@ class Person extends Parse.Object {
     return person;
   }
 
+  static async updateOnline(nickName: string, online: boolean): Promise<void> {
+    const people = await (new Parse.Query(Person)).equalTo('nickname', nickName).find();
+    const person = people[0];
+
+    if (person === undefined)
+      return null;
+
+    person.set('online', online);
+    person.set('lastSeen', new Date());
+    await person.save();
+  }
+
   constructor() {
     super('Person');
   }

@@ -6,6 +6,7 @@
 
 import { City, Person } from '../api';
 import { VisibleError } from '../errors';
+// import * as Parse from 'parse/node';
 
 class HubotChatRadar {
 
@@ -14,10 +15,13 @@ class HubotChatRadar {
   constructor(robot) {
     this.robot = robot;
 
-    this.robot.respond(/(мой город|город|my city|city) (is)? ?(.*)$/i, this.city);
+    this.robot.respond(/(мой город|город|my city|city) (is)? ?(.*)$/i, this.handleCity);
+
+    this.robot.enter(this.handleEnter);
+    this.robot.leave(this.handleLeave);
   }
 
-  async city(msg) {
+  async handleCity(msg) {
     const cityName = <string>msg.match[3];
     const nickName = msg.envelope.user.name;
 
@@ -41,6 +45,16 @@ class HubotChatRadar {
         return msg.send(err.message);
       msg.send('Произошла ошибка. Попробуйте еще раз');
     }
+  }
+
+  async handleEnter(msg) {
+    const nickName = msg.envelope.user.name;
+    Person.updateOnline(nickName, true);
+  }
+
+  async handleLeave(msg) {
+    const nickName = msg.envelope.user.name;
+    Person.updateOnline(nickName, false);
   }
 
 }
