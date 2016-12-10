@@ -1,6 +1,6 @@
 import * as Nominatim from 'nominatim-browser';
 import * as Parse from 'parse/node';
-const wiki = require('wikijs').default;
+const wiki = require('wikijs').default; // tslint:disable-line
 
 class City extends Parse.Object {
 
@@ -36,7 +36,7 @@ class City extends Parse.Object {
         city.set('photoUrl', null);
       }
       city.set('force', false);
-      await city.save();
+      await city.save(null, { useMasterKey: true });
     }
 
     return city;

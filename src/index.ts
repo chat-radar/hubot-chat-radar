@@ -5,6 +5,7 @@ import * as path from 'path';
 // initialize API
 Parse.initialize(config['parse appId']);
 (<any>Parse).serverURL = config['parse serverURL'];
+(<any>Parse).masterKey = config['parse masterKey'];
 
 export = (robot) => {
   robot.loadFile(path.resolve(__dirname, 'scripts'), 'hubot-chat-radar.js');

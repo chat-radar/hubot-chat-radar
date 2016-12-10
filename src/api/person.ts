@@ -9,7 +9,7 @@ class Person extends Parse.Object {
     if (person === undefined) {
       person = new Person();
       person.set('nickname', nickName);
-      await person.save();
+      await person.save(null, { useMasterKey: true });
     }
 
     return person;
@@ -24,7 +24,7 @@ class Person extends Parse.Object {
 
     person.set('online', online);
     person.set('lastSeen', new Date());
-    await person.save();
+    await person.save(null, { useMasterKey: true });
   }
 
   constructor() {

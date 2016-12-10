@@ -35,7 +35,7 @@ class HubotChatRadar {
       const person = await Person.findOrCreate(nickName);
 
       person.set('city', city);
-      person.save();
+      person.save(null, { useMasterKey: true });
 
       msg.reply(`Твой адрес изменен на «${city.get('name')}»`);
     } catch (err) {
