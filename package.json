@@ -22,6 +22,8 @@
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
+    "@types/joi": "^9.0.33",
+    "joi": "^10.0.5",
     "nominatim-browser": "^1.0.0",
     "parse": "^1.9.2",
     "wikijs": "^1.1.1"
