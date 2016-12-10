@@ -36,6 +36,7 @@ class HubotChatRadar {
 
       person.set('city', city);
       person.save(null, { useMasterKey: true });
+      Person.updateOnline(person.get('nickname'), true);
 
       msg.reply(`Твой адрес изменен на «${city.get('name')}»`);
     } catch (err) {
