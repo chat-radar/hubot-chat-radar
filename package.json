@@ -32,9 +32,9 @@
     "@types/node": "^6.0.51",
     "@types/parse": "^1.2.32",
     "rimraf": "^2.5.4",
-    "ts-node": "^1.7.0",
+    "ts-node": "^1.7.2",
     "tslint": "4.0.2",
-    "typescript": "2.0.10"
+    "typescript": "2.1.4"
   },
   "peerDependencies": {
     "hubot": "2.x"
