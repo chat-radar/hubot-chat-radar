@@ -27,6 +27,15 @@ class Person extends Parse.Object {
     await person.save(null, { useMasterKey: true });
   }
 
+  static async resetOnline(): Promise<Person[]> {
+    const onlinePeople = await (new Parse.Query(Person)).equalTo('online', true).find();
+
+    return Promise.all(onlinePeople.map((person) => {
+      person.set('online', false);
+      return person.save(null, { useMasterKey: true });
+    }));
+  }
+
   constructor() {
     super('Person');
   }

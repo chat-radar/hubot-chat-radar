@@ -12,10 +12,15 @@ class HubotChatRadar {
 
   protected robot;
 
+  protected onlineResetPromise: Promise<Person[]> = null;
+
   constructor(robot) {
     this.robot = robot;
 
     this.robot.respond(/(мой город|город|my city|city) (is)? ?(.*)$/i, this.handleCity);
+
+    this.handleConnected();
+    this.robot.adapter.on('reconnected', this.handleConnected);
 
     this.robot.enter(this.handleEnter);
     this.robot.leave(this.handleLeave);
@@ -49,13 +54,37 @@ class HubotChatRadar {
   }
 
   async handleEnter(msg) {
+    if (this.onlineResetPromise)
+      await this.onlineResetPromise;
+
     const nickName = msg.envelope.user.name;
-    Person.updateOnline(nickName, true);
+    try {
+      Person.updateOnline(nickName, true);
+    } catch (err) {
+      this.robot.logger.error(err);
+    }
   }
 
   async handleLeave(msg) {
+    if (this.onlineResetPromise)
+      await this.onlineResetPromise;
+
     const nickName = msg.envelope.user.name;
-    Person.updateOnline(nickName, false);
+    try {
+      Person.updateOnline(nickName, false);
+    } catch (err) {
+      this.robot.logger.error(err);
+    }
+  }
+
+  async handleConnected() {
+    this.onlineResetPromise = Person.resetOnline();
+    try {
+      await this.onlineResetPromise;
+    } catch (err) {
+      this.robot.logger.error(err);
+    }
+    this.onlineResetPromise = null;
   }
 
 }
