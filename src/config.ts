@@ -1,13 +1,14 @@
 import * as joi from 'joi';
 
-const { error: err, value: env } = joi.validate(process.env, joi.object({
+const schema = joi.object({
   NODE_ENV: joi.string().allow(['development', 'production']).default('production'),
   PARSE_SERVER_URL: joi.string().default('http://localhost:1337/api'),
   PARSE_MASTER_KEY: joi.string().required(),
-}));
+});
 
-if (err)
-  throw new Error(`Config validation error: ${err.message}`);
+const { error: err, value: env } = joi.validate(process.env, schema.unknown().required());
+
+if (err) throw new Error(`Config validation error: ${err.message}`);
 
 export default {
   'parse appId': 'chatradar',
