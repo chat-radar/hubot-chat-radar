@@ -1,8 +1,13 @@
 // Description:
-//   Отметиться на карте.
+//   Check in on Chat Radar map.
 //
 // Commands:
-//   hubot мой город <город> - Отметиться на карте
+//   мой город <город> - Отметить свое местоположение
+//
+// Configuration:
+//   PUBLIC_URI
+//   PARSE_SERVER_URI
+//   PARSE_MASTER_KEY
 
 import { City, Person } from '../api';
 import { VisibleError } from '../errors';
