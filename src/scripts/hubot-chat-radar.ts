@@ -24,7 +24,7 @@ class HubotChatRadar {
   constructor(robot) {
     this.robot = robot;
 
-    this.robot.hear(/(мой|мое|моё|моя|my)? ?(город|село|деревня|поселок|посёлок|адрес|city) ?(is|:)? ?(.*)$/i, this.handleCity); // tslint:disable-line
+    this.robot.respond(/(мой|мое|моё|моя|my)? ?(город|село|деревня|поселок|посёлок|адрес|city) ?(is|:)? ?(.*)$/i, this.handleCity); // tslint:disable-line
     this.robot.respond(/(покажи|display|give|get)? ?(a)? ?(список|всех|list|all) ?(пользователей|людей|users|people)?/i, this.handleListAll); // tslint:disable-line
 
     this.handleConnected();
