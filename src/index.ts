@@ -4,7 +4,7 @@ import * as path from 'path';
 
 // initialize API
 Parse.initialize(config['parse appId']);
-(<any>Parse).serverURL = config['parse serverURL'];
+(<any>Parse).serverURL = config['parse serverURI'];
 (<any>Parse).masterKey = config['parse masterKey'];
 
 export = (robot) => {

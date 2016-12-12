@@ -7,6 +7,7 @@
 import { City, Person } from '../api';
 import { VisibleError } from '../errors';
 // import * as Parse from 'parse/node';
+import config from '../config';
 
 class HubotChatRadar {
 
@@ -43,7 +44,7 @@ class HubotChatRadar {
       person.save(null, { useMasterKey: true });
       Person.updateOnline(person.get('nickname'), true);
 
-      msg.reply(`Твой адрес изменен на «${city.get('name')}»`);
+      msg.reply(`Теперь твой адрес «${city.get('name')}». Оглянись вокруг ${config['public URI']}/#/${city.id} ;)`);
     } catch (err) {
       this.robot.logger.error(err);
 
