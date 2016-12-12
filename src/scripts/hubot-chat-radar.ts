@@ -79,7 +79,7 @@ class HubotChatRadar {
       msg.reply('Ответил в привате');
 
       process.nextTick(() => {
-        msg.envelope.user.type = 'direct';
+        msg.envelope.user.type = 'chat';
         msg.send(`Карта чата: ${config['public URI']}/\n${lines.join('\n')}`);
       });
     } catch (err) {
