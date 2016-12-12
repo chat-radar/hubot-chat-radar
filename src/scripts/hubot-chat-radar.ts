@@ -3,6 +3,7 @@
 //
 // Commands:
 //   мой город <город> - Отметить свое местоположение
+//   hubot покажи всех - Показать список всех городов
 //
 // Configuration:
 //   PUBLIC_URI
@@ -24,6 +25,7 @@ class HubotChatRadar {
     this.robot = robot;
 
     this.robot.hear(/(мой|мое|моё|моя|my)? ?(город|село|деревня|поселок|посёлок|адрес|city) ?(is|:)? ?(.*)$/i, this.handleCity); // tslint:disable-line
+    this.robot.respond(/(покажи|display|give|get)? ?(a)? ?(список|всех|list|all) ?(пользователей|людей|users|people)?/i, this.handleListAll); // tslint:disable-line
 
     this.handleConnected();
     this.robot.adapter.on('reconnected', this.handleConnected);
@@ -50,6 +52,36 @@ class HubotChatRadar {
       Person.updateOnline(person.get('nickname'), true);
 
       msg.reply(`Теперь твой адрес «${city.get('name')}». Оглянись вокруг ${config['public URI']}/#/${city.id} ;)`);
+    } catch (err) {
+      this.robot.logger.error(err);
+
+      if (err instanceof VisibleError)
+        return msg.send(err.message);
+      msg.send('Произошла ошибка. Попробуйте еще раз');
+    }
+  }
+
+  // TODO: refactor this
+  async handleListAll(msg) {
+    try {
+      const { cities, people } = await City.listAll();
+
+      const lines = cities.map((city) => {
+        return city.get('name').split(', ')[0]
+          + ': '
+          + people.filter((person) => {
+            return person.get('city').id === city.id;
+          }).map((person) => {
+            return person.get('nickname');
+          }).join(', ');
+      });
+
+      msg.reply('Ответил в привате');
+
+      process.nextTick(() => {
+        msg.envelope.user.type = 'direct';
+        msg.send(`Карта чата: ${config['public URI']}/\n${lines.join('\n')}`);
+      });
     } catch (err) {
       this.robot.logger.error(err);
 

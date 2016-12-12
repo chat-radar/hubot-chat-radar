@@ -1,5 +1,6 @@
 import * as Nominatim from 'nominatim-browser';
 import * as Parse from 'parse/node';
+import Person from './person';
 const wiki = require('wikijs').default; // tslint:disable-line
 
 class City extends Parse.Object {
@@ -57,6 +58,18 @@ class City extends Parse.Object {
       return null;
 
     return photo.imageinfo[0].url;
+  }
+
+  // TODO: change DB structure
+  static async listAll() {
+    const people = await (new Parse.Query(Person))
+      .find();
+    const cities = await (new Parse.Query(City))
+      .ascending('name')
+      .containedIn('objectId', people.map((person) => person.get('city').id))
+      .find();
+
+    return { cities, people };
   }
 
   constructor() {
