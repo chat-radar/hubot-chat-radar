@@ -1,8 +1,8 @@
 // Description:
-//   Изменение своего города для чата.
+//   Отметиться на карте.
 //
 // Commands:
-//   hubot мой город <город> - Изменить свой город
+//   hubot мой город <город> - Отметиться на карте
 
 import { City, Person } from '../api';
 import { VisibleError } from '../errors';
@@ -18,7 +18,7 @@ class HubotChatRadar {
   constructor(robot) {
     this.robot = robot;
 
-    this.robot.respond(/(мой город|город|my city|city) (is)? ?(.*)$/i, this.handleCity);
+    this.robot.hear(/(мой|мое|моё|моя|my)? ?(город|село|деревня|поселок|посёлок|адрес|city) ?(is|:)? ?(.*)$/i, this.handleCity); // tslint:disable-line
 
     this.handleConnected();
     this.robot.adapter.on('reconnected', this.handleConnected);
@@ -28,7 +28,7 @@ class HubotChatRadar {
   }
 
   async handleCity(msg) {
-    const cityName = <string>msg.match[3];
+    const cityName = <string>msg.match[4];
     const nickName = msg.envelope.user.name;
 
     try {
