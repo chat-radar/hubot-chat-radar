@@ -5,9 +5,9 @@ const wiki = require('wikijs').default; // tslint:disable-line
 
 class City extends Parse.Object {
 
-  static async fetchAddress(cityName: string): Promise<Nominatim.NominatimResponse> {
+  static async fetchAddress(query: string): Promise<Nominatim.NominatimResponse> {
     const cities = await Nominatim.geocode({
-      city: cityName,
+      q: query,
       addressdetails: true,
       limit: 1,
     });
