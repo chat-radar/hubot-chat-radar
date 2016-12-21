@@ -52,7 +52,6 @@ class City extends Parse.Object {
     const [lang, label] = wikipedia.split(':');
     const url = wdk.sparqlQuery(`
       SELECT ?photoUrl ?timeZoneLabel ?inception ?area ?population WHERE {
-        ?city wdt:P31/wdt:P279* wd:Q515 .
         ?city rdfs:label "${label}"@${lang} .
         OPTIONAL {
           ?city wdt:P18 ?photoUrl .
