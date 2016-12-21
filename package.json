@@ -24,20 +24,21 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
-    "joi": "^10.0.5",
-    "nominatim-browser": "^1.0.0",
+    "joi": "^10.0.6",
+    "nominatim-browser": "^2.0.1",
     "parse": "^1.9.2",
     "wikidata-sdk": "^4.1.0"
   },
   "devDependencies": {
     "@types/axios": "^0.9.34",
-    "@types/joi": "^9.0.33",
+    "@types/bluebird": "^3.0.36",
+    "@types/joi": "^10.0.0",
     "@types/node": "^6.0.52",
     "@types/parse": "^1.2.32",
     "npm-check-updates": "^2.8.8",
     "rimraf": "^2.5.4",
     "ts-node": "^1.7.2",
-    "tslint": "4.0.2",
+    "tslint": "4.1.1",
     "typescript": "2.1.4"
   },
   "peerDependencies": {
