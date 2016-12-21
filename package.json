@@ -22,14 +22,16 @@
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
-    "@types/joi": "^9.0.33",
+    "axios": "^0.15.3",
     "joi": "^10.0.5",
     "nominatim-browser": "^1.0.0",
     "parse": "^1.9.2",
-    "wikijs": "^1.1.1"
+    "wikidata-sdk": "^4.1.0"
   },
   "devDependencies": {
-    "@types/node": "^6.0.51",
+    "@types/axios": "^0.9.34",
+    "@types/joi": "^9.0.33",
+    "@types/node": "^6.0.52",
     "@types/parse": "^1.2.32",
     "rimraf": "^2.5.4",
     "ts-node": "^1.7.2",

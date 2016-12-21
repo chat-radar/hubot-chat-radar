@@ -1,7 +1,8 @@
 import * as Nominatim from 'nominatim-browser';
 import * as Parse from 'parse/node';
 import Person from './person';
-const wiki = require('wikijs').default; // tslint:disable-line
+import * as axios from 'axios';
+const wdk = require('wikidata-sdk'); // tslint:disable-line
 
 class City extends Parse.Object {
 
@@ -9,6 +10,7 @@ class City extends Parse.Object {
     const cities = await Nominatim.geocode({
       q: query,
       addressdetails: true,
+      extratags: true,
       limit: 1,
     });
 
@@ -26,15 +28,18 @@ class City extends Parse.Object {
       city.set('force', true);
     }
 
-    if (city.get('force')) {
+    if (city.get('force') || true) {
       city.set('placeId', parseInt(cityAddress.place_id, 10));
       city.set('name', cityAddress.display_name);
       city.set('address', cityAddress.address);
       city.set('geo', new Parse.GeoPoint([cityAddress.lat, cityAddress.lon]));
-      try {
-        city.set('photoUrl', await City.fetchPhoto(cityAddress));
-      } catch (err) {
-        city.set('photoUrl', null);
+      if (cityAddress.extratags && cityAddress.extratags.wikipedia) {
+        const info = await this.fetchInfo(cityAddress.extratags.wikipedia);
+        city.set('photoUrl', info.photoUrl);
+        city.set('timeZone', info.timeZone);
+        city.set('inception', info.inception);
+        city.set('area', info.area);
+        city.set('population', info.population);
       }
       city.set('force', false);
       await city.save(null, { useMasterKey: true });
@@ -43,24 +48,51 @@ class City extends Parse.Object {
     return city;
   }
 
-  static async fetchPhoto(cityAddress: Nominatim.NominatimResponse) {
-    const wikiPage = await wiki().page(cityAddress.address.city);
+  static async fetchInfo(wikipedia: string) {
+    const [lang, label] = wikipedia.split(':');
+    const url = wdk.sparqlQuery(`
+      SELECT ?photoUrl ?timeZoneLabel ?inception ?area ?population WHERE {
+        ?city wdt:P31/wdt:P279* wd:Q515 .
+        ?city rdfs:label "${label}"@${lang} .
+        OPTIONAL {
+          ?city wdt:P18 ?photoUrl .
+        }
+        OPTIONAL {
+          ?city wdt:P421 ?timeZone .
+        }
+        OPTIONAL {
+          ?city wdt:P571 ?inception .
+        }
+        OPTIONAL {
+          ?city wdt:P2046 ?area .
+        }
+        OPTIONAL {
+          ?city wdt:P1082 ?population .
+        }
+        SERVICE wikibase:label {
+          bd:serviceParam wikibase:language "${lang}" .
+        }
+      }
+      LIMIT 1
+    `);
 
-    const info = await wikiPage.info();
+    const response = await axios(url);
 
-    if (!info.image_skyline)
-      return null;
+    const bindings = (<any>response.data).results.bindings[0];
+    const values: any = Object.keys(bindings).reduce((previous, current) => {
+      previous[current] = bindings[current].value;
+      return previous;
+    }, {});
 
-    const images = await wikiPage.rawImages();
-    const photo = images.find((image) => image.title === `File:${info.image_skyline}`);
-
-    if (!photo || !photo.imageinfo || !photo.imageinfo[0] || !photo.imageinfo[0].url)
-      return null;
-
-    return photo.imageinfo[0].url;
+    return {
+      photoUrl: (values.photoUrl ? values.photoUrl : null),
+      timeZone: (/^UTC(\+|\-|\−){1}[0-9]{1,2}:?[0-9]{0,2}$/.test(values.timeZoneLabel) ? values.timeZoneLabel.replace('−', '-') : null), // tslint:disable-line
+      inception: (values.inception ? new Date(values.inception) : null),
+      area: (values.area ? parseFloat(values.area) : null),
+      population: (values.population ? parseInt(values.population, 10) : null),
+    };
   }
 
-  // TODO: change DB structure
   static async listAll() {
     const people = await (new Parse.Query(Person))
       .find();
