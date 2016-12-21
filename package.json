@@ -19,7 +19,8 @@
     "build": "npm run clean && npm run lint && echo Using TypeScript && tsc --version && tsc --pretty",
     "test": "npm run build && mocha --compilers ts:ts-node/register --recursive test/**/*-spec.ts",
     "watch": "npm run build -- --watch",
-    "watch:test": "npm run test -- --watch"
+    "watch:test": "npm run test -- --watch",
+    "current": "ncu --upgrade --upgradeAll"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -33,6 +34,7 @@
     "@types/joi": "^9.0.33",
     "@types/node": "^6.0.52",
     "@types/parse": "^1.2.32",
+    "npm-check-updates": "^2.8.8",
     "rimraf": "^2.5.4",
     "ts-node": "^1.7.2",
     "tslint": "4.0.2",
