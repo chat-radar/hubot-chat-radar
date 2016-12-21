@@ -28,7 +28,7 @@ class City extends Parse.Object {
       city.set('force', true);
     }
 
-    if (city.get('force') || true) {
+    if (city.get('force')) {
       city.set('placeId', parseInt(cityAddress.place_id, 10));
       city.set('name', cityAddress.display_name);
       city.set('address', cityAddress.address);
