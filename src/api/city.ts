@@ -78,7 +78,7 @@ class City extends Parse.Object {
 
     const response = await axios(url);
 
-    const bindings = (<any>response.data).results.bindings[0];
+    const bindings = (<any>response.data).results.bindings[0] || {};
     const values: any = Object.keys(bindings).reduce((previous, current) => {
       previous[current] = bindings[current].value;
       return previous;
