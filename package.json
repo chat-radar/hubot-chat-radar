@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
-    "joi": "^10.0.6",
+    "joi": "^10.1.0",
     "nominatim-browser": "^2.0.1",
     "parse": "^1.9.2",
     "wikidata-sdk": "^4.1.0"
@@ -33,12 +33,12 @@
     "@types/axios": "^0.9.34",
     "@types/bluebird": "^3.0.36",
     "@types/joi": "^10.0.0",
-    "@types/node": "^6.0.52",
+    "@types/node": "^6.0.53",
     "@types/parse": "^1.2.32",
-    "npm-check-updates": "^2.8.8",
+    "npm-check-updates": "^2.8.9",
     "rimraf": "^2.5.4",
     "ts-node": "^1.7.2",
-    "tslint": "4.1.1",
+    "tslint": "4.2.0",
     "typescript": "2.1.4"
   },
   "peerDependencies": {
