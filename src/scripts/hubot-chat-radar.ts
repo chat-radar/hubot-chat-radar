@@ -12,8 +12,8 @@
 
 import { City, Person } from '../api';
 import { VisibleError } from '../errors';
-// import * as Parse from 'parse/node';
 import config from '../config';
+import { parseName } from '../utils';
 
 class HubotChatRadar {
 
@@ -100,8 +100,19 @@ class HubotChatRadar {
     if (this.onlineResetPromise)
       await this.onlineResetPromise;
 
-    const nickName = msg.envelope.user.name;
+    const { nickName, cityName } = parseName(msg.envelope.user.name);
+
     try {
+      if (cityName !== null) {
+        const cityAddress = await City.fetchAddress(cityName);
+
+        const city = await City.findOrCreate(cityAddress);
+        const person = await Person.findOrCreate(nickName);
+
+        person.set('city', city);
+        person.save(null, { useMasterKey: true });
+      }
+
       Person.updateOnline(nickName, true);
     } catch (err) {
       this.robot.logger.error(err);
