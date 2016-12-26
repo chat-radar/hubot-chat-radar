@@ -17,10 +17,6 @@ import { parseName } from '../utils';
 
 class HubotChatRadar {
 
-  static cityRe = '(мой|мое|моё|моя|my)? ?(город|село|деревня|поселок|посёлок|адрес|city) ?(is|:)? ?(.*)$';
-
-  static listAllRe = '(покажи|display|give|get)? ?(a)? ?(список|всех|list|all) ?(пользователей|людей|users|people)?';
-
   protected robot;
 
   protected onlineResetPromise: Promise<Person[]> = null;
@@ -28,9 +24,8 @@ class HubotChatRadar {
   constructor(robot) {
     this.robot = robot;
 
-    this.robot.respond(new RegExp(HubotChatRadar.cityRe, 'i'), this.handleCity);
-    this.robot.hear(new RegExp('^' + HubotChatRadar.cityRe, 'i'), this.handleCity);
-    this.robot.respond(new RegExp(HubotChatRadar.listAllRe, 'i'), this.handleListAll);
+    this.robot.respond(/(мой|мое|моё|моя|my)? ?(город|село|деревня|поселок|посёлок|адрес|city) ?(is|:)? ?(.*)$/i, this.handleCity); // tslint:disable-line
+    this.robot.respond(/(покажи|display|give|get)? ?(a)? ?(список|всех|list|all) ?(пользователей|людей|users|people)?/i, this.handleListAll); // tslint:disable-line
 
     this.handleConnected();
     this.robot.adapter.on('reconnected', this.handleConnected);
