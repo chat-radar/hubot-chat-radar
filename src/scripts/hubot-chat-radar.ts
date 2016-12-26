@@ -30,7 +30,7 @@ class HubotChatRadar {
 
     this.robot.respond(new RegExp(HubotChatRadar.cityRe, 'i'), this.handleCity);
     this.robot.hear(new RegExp('^' + HubotChatRadar.cityRe, 'i'), this.handleCity);
-    this.robot.respond(new RegExp(HubotChatRadar.cityRe, 'i'), this.handleListAll);
+    this.robot.respond(new RegExp(HubotChatRadar.listAllRe, 'i'), this.handleListAll);
 
     this.handleConnected();
     this.robot.adapter.on('reconnected', this.handleConnected);
@@ -44,7 +44,13 @@ class HubotChatRadar {
     const nickName = msg.envelope.user.name;
 
     try {
-      const cityAddress = await City.fetchAddress(cityName);
+      let cityAddress = this.robot.brain.get(`cityAddress:${cityName}`);
+      if (cityAddress === null) {
+        cityAddress = await City.fetchAddress(cityName);
+        this.robot.brain.set(`cityAddress:${cityName}`, (cityAddress !== null) ? cityAddress : 'null');
+      } else if (cityAddress === 'null') {
+        cityAddress = null;
+      }
 
       if (cityAddress === null)
         throw new VisibleError('Извините, город не найден. Попробуйте уточнить название');
