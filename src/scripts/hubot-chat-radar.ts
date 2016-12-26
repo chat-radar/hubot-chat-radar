@@ -44,13 +44,7 @@ class HubotChatRadar {
     const nickName = msg.envelope.user.name;
 
     try {
-      let cityAddress = this.robot.brain.get(`cityAddress:${cityName}`);
-      if (cityAddress === null) {
-        cityAddress = await City.fetchAddress(cityName);
-        this.robot.brain.set(`cityAddress:${cityName}`, (cityAddress !== null) ? cityAddress : 'null');
-      } else if (cityAddress === 'null') {
-        cityAddress = null;
-      }
+      const cityAddress = await City.fetchAddress(cityName);
 
       if (cityAddress === null)
         throw new VisibleError('Извините, город не найден. Попробуйте уточнить название');

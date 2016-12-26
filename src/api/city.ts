@@ -2,11 +2,19 @@ import * as Nominatim from 'nominatim-browser';
 import * as Parse from 'parse/node';
 import Person from './person';
 import * as axios from 'axios';
+import cache from '../cache';
 const wdk = require('wikidata-sdk'); // tslint:disable-line
 
 class City extends Parse.Object {
 
   static async fetchAddress(query: string): Promise<Nominatim.NominatimResponse> {
+    let city;
+    const cacheKey = `cityAddress:${query}`;
+
+    city = cache.get(cacheKey);
+    if (city !== undefined)
+      return city;
+
     const cities = await Nominatim.geocode({
       q: query,
       addressdetails: true,
@@ -14,9 +22,11 @@ class City extends Parse.Object {
       limit: 1,
     });
 
-    if (cities.length < 1)
-      return null;
-    return cities[0];
+    city = (cities.length > 0) ? cities[0] : null;
+
+    cache.set(cacheKey, city);
+
+    return city;
   }
 
   static async findOrCreate(cityAddress: Nominatim.NominatimResponse): Promise<City> {
