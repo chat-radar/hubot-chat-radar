@@ -20,6 +20,7 @@ class City extends Parse.Object {
       addressdetails: true,
       extratags: true,
       limit: 1,
+      featuretype: 'city',
     });
 
     city = (cities.length > 0) ? cities[0] : null;
