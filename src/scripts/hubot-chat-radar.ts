@@ -41,7 +41,7 @@ class HubotChatRadar {
 
   async handleCity(msg) {
     const cityName = <string>msg.match[4];
-    const nickName = msg.envelope.user.name;
+    const { nickName } = parseName(msg.envelope.user.name);
 
     try {
       const cityAddress = await City.fetchAddress(cityName);
@@ -54,7 +54,7 @@ class HubotChatRadar {
 
       person.set('city', city);
       person.save(null, { useMasterKey: true });
-      Person.updateOnline(person.get('nickname'), true);
+      Person.updateOnline(person, true);
 
       msg.reply(`Теперь твой адрес «${city.get('name')}». Оглянись вокруг ${config['public URI']}/#/${city.id} ;)`);
     } catch (err) {
@@ -100,20 +100,21 @@ class HubotChatRadar {
     if (this.onlineResetPromise)
       await this.onlineResetPromise;
 
-    const { nickName, cityName } = parseName(msg.envelope.user.name);
-
     try {
+      let person: Person;
+      const { nickName, cityName } = parseName(msg.envelope.user.name);
+
       if (cityName !== null) {
         const cityAddress = await City.fetchAddress(cityName);
 
         const city = await City.findOrCreate(cityAddress);
-        const person = await Person.findOrCreate(nickName);
+        person = await Person.findOrCreate(nickName);
 
         person.set('city', city);
         person.save(null, { useMasterKey: true });
       }
 
-      Person.updateOnline(nickName, true);
+      Person.updateOnline(person || nickName, true);
     } catch (err) {
       this.robot.logger.error(err);
     }
@@ -123,8 +124,8 @@ class HubotChatRadar {
     if (this.onlineResetPromise)
       await this.onlineResetPromise;
 
-    const nickName = msg.envelope.user.name;
     try {
+      const { nickName } = parseName(msg.envelope.user.name);
       Person.updateOnline(nickName, false);
     } catch (err) {
       this.robot.logger.error(err);

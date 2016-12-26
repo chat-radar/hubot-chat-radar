@@ -15,12 +15,17 @@ class Person extends Parse.Object {
     return person;
   }
 
-  static async updateOnline(nickName: string, online: boolean): Promise<void> {
-    const people = await (new Parse.Query(Person)).equalTo('nickname', nickName).find();
-    const person = people[0];
+  static async updateOnline(query: Person | string, online: boolean): Promise<void> {
+    let person: Person;
+    if (typeof query === 'string') {
+      const people = await (new Parse.Query(Person)).equalTo('nickname', query).find();
+      person = people[0];
+    } else {
+      person = query;
+    }
 
     if (person === undefined)
-      return null;
+      return;
 
     person.set('online', online);
     person.set('lastSeen', new Date());

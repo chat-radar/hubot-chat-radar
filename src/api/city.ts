@@ -9,7 +9,7 @@ class City extends Parse.Object {
 
   static async fetchAddress(query: string): Promise<Nominatim.NominatimResponse> {
     let city;
-    const cacheKey = `cityAddress:${query}`;
+    const cacheKey = `cityAddress:${query.toLowerCase()}`;
 
     city = cache.get(cacheKey);
     if (city !== undefined)
