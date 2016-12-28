@@ -35,12 +35,14 @@ class HubotChatRadar {
   }
 
   async handleCity(msg) {
-    const cityName = <string>msg.match[4];
-    const { nickName } = parseName(msg.envelope.user.name);
-
     try {
-      const cityAddress = await City.fetchAddress(cityName);
+      if (msg.envelope.user.type !== 'groupchat')
+        throw new VisibleError('К сожалению, приватные сообщения пока не поддерживаются');
 
+      const cityName = <string>msg.match[4];
+      const { nickName } = parseName(msg.envelope.user.name);
+
+      const cityAddress = await City.fetchAddress(cityName);
       if (cityAddress === null)
         throw new VisibleError('Извините, город не найден. Попробуйте уточнить название');
 
