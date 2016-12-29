@@ -6,9 +6,9 @@
   version "0.9.34"
   resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.9.34.tgz#6989cc08948eb0824d8661c5ab5775766ab552b5"
 
-"@types/bluebird@^3.0.36":
-  version "3.0.36"
-  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.0.36.tgz#b804ddd1b1a082cf3e2137dfa7b5287f437c29b7"
+"@types/bluebird@^3.0.37":
+  version "3.0.37"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.0.37.tgz#2e76b394aa9bea40d04241a31c0887a260283388"
 
 "@types/joi@^10.0.0":
   version "10.0.0"
@@ -18,11 +18,7 @@
   version "2.0.34"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-2.0.34.tgz#27615b369f30e572336126514e74672dda6e3d04"
 
-"@types/node@*":
-  version "6.0.53"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.53.tgz#8c300ca8ba51f80f98f3525b932ff47c6efd6be1"
-
-"@types/node@^6.0.54":
+"@types/node@*", "@types/node@^6.0.54":
   version "6.0.54"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.54.tgz#65859962ba988052cbdd5c48881395acfdd46931"
 
@@ -1666,9 +1662,9 @@ tough-cookie@~2.3.0:
   dependencies:
     punycode "^1.4.1"
 
-ts-node@^1.7.3:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-1.7.3.tgz#dee7f8a84751732d3c2e497cac5a02fb117dfee7"
+ts-node@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-2.0.0.tgz#16e4fecc949088238b4cbf1c39c9582526b66f74"
   dependencies:
     arrify "^1.0.0"
     chalk "^1.1.1"
