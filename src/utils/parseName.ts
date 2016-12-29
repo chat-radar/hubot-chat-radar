@@ -1,15 +1,29 @@
+/**
+ * Parse city from nickname
+ *
+ * @example
+ * // returns { nickname: 'James', cityName: 'Greensboro' }
+ * parseName('James (Greensboro)');
+ *
+ * @example
+ * // returns { nickname: 'Ivan', cityName: 'Moscow' }
+ * parseName('Ivan [Moscow]');
+ *
+ * @param   {string}             fullName user full nickname
+ * @return  {nickname, cityName}          name splited to nickname and cityName
+ */
 export default function parseName(fullName: string) {
-  let nickName: string = null;
+  let nickname: string = null;
   let cityName: string = null;
 
   const matches = fullName.match(/^(.*)(\(|\[)(.*)(\)|\])$/);
 
   if (matches === null) {
-    nickName = fullName.trim();
+    nickname = fullName.trim();
   } else {
-    nickName = matches[1].trim();
+    nickname = matches[1].trim();
     cityName = matches[3].trim();
   }
 
-  return { nickName, cityName };
+  return { nickname, cityName };
 }

@@ -12,5 +12,6 @@ export = (robot) => {
   // initialize cache
   cache.initialize(robot);
 
+  // initialize scripts
   robot.loadFile(path.resolve(__dirname, 'scripts'), 'hubot-chat-radar.js');
 };

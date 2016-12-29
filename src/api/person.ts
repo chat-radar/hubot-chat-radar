@@ -1,27 +1,35 @@
 import * as Parse from 'parse/node';
+import Chat from './chat';
+
+type PersonQuery = { nickname: string };
 
 class Person extends Parse.Object {
 
-  static async findOrCreate(nickName: string): Promise<Person> {
-    const people = await (new Parse.Query(Person)).equalTo('nickname', nickName).find();
+  static async findOrCreate(query: PersonQuery, chat: Chat): Promise<Person> {
+    const people = await (new Parse.Query(Person))
+      .equalTo('nickname', query.nickname)
+      .equalTo('chat', chat)
+      .find();
+
     let person = people[0];
 
     if (person === undefined) {
       person = new Person();
-      person.set('nickname', nickName);
+      person.set('nickname', query.nickname);
+      person.set('chat', chat);
       await person.save(null, { useMasterKey: true });
     }
 
     return person;
   }
 
-  static async updateOnline(query: Person | string, online: boolean): Promise<void> {
+  static async updateOnline(query: Person | PersonQuery, online: boolean): Promise<void> {
     let person: Person;
-    if (typeof query === 'string') {
-      const people = await (new Parse.Query(Person)).equalTo('nickname', query).find();
+    if ((<PersonQuery>query).nickname !== undefined) {
+      const people = await (new Parse.Query(Person)).equalTo('nickname', (<PersonQuery>query).nickname).find();
       person = people[0];
     } else {
-      person = query;
+      person = <Person>query;
     }
 
     if (person === undefined)
