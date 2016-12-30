@@ -65,7 +65,7 @@ class HubotChatRadar {
       this.statusQueue.add(Person.updateOnline.bind(null, person, true));
 
       // address changed
-      msg.reply(`Теперь твой адрес «${city.get('name')}». Оглянись вокруг ${config['public URI']}/#/${city.id} ;)`);
+      msg.reply(`Теперь твой адрес «${city.get('name')}». Оглянись вокруг ${config['public URI']}/#/${chat.id}/${city.id} ;)`); // tslint:disable-line
     } catch (err) {
       this.robot.logger.error(err);
 
