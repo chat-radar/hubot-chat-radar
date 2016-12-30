@@ -1,6 +1,7 @@
 import * as Nominatim from 'nominatim-browser';
 import * as Parse from 'parse/node';
 import Person from './person';
+import Chat from './chat';
 import * as axios from 'axios';
 import cache from '../cache';
 const wdk = require('wikidata-sdk'); // tslint:disable-line
@@ -103,8 +104,9 @@ class City extends Parse.Object {
     };
   }
 
-  static async listAll() {
+  static async listAll(chat: Chat) {
     const people = await (new Parse.Query(Person))
+      .equalTo('chat', chat)
       .find();
     const cities = await (new Parse.Query(City))
       .ascending('name')

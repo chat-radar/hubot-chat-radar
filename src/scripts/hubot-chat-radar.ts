@@ -14,7 +14,7 @@ import { City, Person, Chat } from '../api';
 import { Queue } from '../queue';
 import { VisibleError } from '../errors';
 import config from '../config';
-import { parseName } from '../utils';
+import { parseName, getCity } from '../utils';
 
 class HubotChatRadar {
 
@@ -76,27 +76,34 @@ class HubotChatRadar {
     }
   }
 
-  // TODO: refactor this
   protected async handleListAll(msg) {
     try {
-      const { cities, people } = await City.listAll();
+      const room = <string>msg.envelope.room;
 
-      const lines = cities.map((city) => {
-        return city.get('name').split(', ')[0]
-          + ': '
-          + people.filter((person) => {
-            return person.get('city').id === city.id;
-          }).map((person) => {
-            return person.get('nickname');
-          }).join(', ');
-      });
+      // chat not found
+      if (!room)
+        throw new VisibleError('Извините, чат не найден');
 
-      msg.reply('Ответил в привате');
+      // chat not registered
+      const chat = await Chat.findByChatId(room);
+      if (chat === null)
+        throw new VisibleError(`Извините, чат ${room} не зарегистрирован`);
 
-      process.nextTick(() => {
-        msg.envelope.user.type = 'chat';
-        msg.send(`Карта чата: ${config['public URI']}/\n${lines.join('\n')}`);
-      });
+      const { cities, people } = await City.listAll(chat);
+
+      let text = '';
+      text += `Карта чата: ${config['public URI']}/#/${chat.id}`;
+      text += '\n\n';
+      text += cities.map((city) => {
+        const inCity = people.filter((person) => person.get('city').id === city.id);
+        return { city, inCity };
+      }).map(({ city, inCity }) => {
+        const cityName = getCity(city.get('address'), city.get('name'));
+        const inCityNames = inCity.map((person) => person.get('nickname')).join(', ');
+        return `${cityName}: ${inCityNames}`;
+      }).join('\n');
+
+      msg.send(text);
     } catch (err) {
       this.robot.logger.error(err);
 
