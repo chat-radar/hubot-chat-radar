@@ -47,7 +47,7 @@ class HubotChatRadar {
         throw new VisibleError('Извините, чат не найден');
 
       // chat not registered
-      const chat = await Chat.findByChatId(room);
+      const chat = await Chat.findByChatId(room.toString());
       if (chat === null)
         throw new VisibleError(`Извините, чат ${room} не зарегистрирован`);
 
